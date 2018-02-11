@@ -421,13 +421,6 @@ class EventListener implements Listener
                         $effect->setVisible(false);
                         $entity->addEffect($effect);
                     }
-                    if (!$entity->hasEffect(Effect::SLOWNESS)) {
-                        $effect = Effect::getEffect(Effect::SLOWNESS);
-                        $effect->setAmplifier($enchantment->getLevel());
-                        $effect->setDuration(100 * $enchantment->getLevel());
-                        $effect->setVisible(false);
-                        $entity->addEffect($effect);
-                    }
                 }
                 $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::WITHER);
                 if ($enchantment !== null && $entity->hasEffect(Effect::WITHER) !== true) {
@@ -448,7 +441,7 @@ class EventListener implements Listener
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::DEATHBRINGER);
             if ($enchantment !== null) {
-                $damage = 2 + ($enchantment->getLevel() / 10);
+                $damage = 1 + ($enchantment->getLevel() / 10);
                 $event->setDamage($event->getDamage() + $damage);
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::GOOEY);
@@ -475,13 +468,13 @@ class EventListener implements Listener
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::CHARGE);
             if ($enchantment !== null) {
                 if ($damager->isSprinting()) {
-                    $event->setDamage($event->getDamage() * (1 + 0.10 * $enchantment->getLevel()));
+                    $event->setDamage($event->getDamage() + (0.5 * $enchantment->getLevel()));
                 }
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::AERIAL);
             if ($enchantment !== null) {
                 if (!$damager->isOnGround()) {
-                    $event->setDamage($event->getDamage() * (1 + 0.10 * $enchantment->getLevel()));
+                    $event->setDamage($event->getDamage() + (0.5 * $enchantment->getLevel()));
                 }
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::DISARMING);
@@ -536,7 +529,7 @@ class EventListener implements Listener
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::BACKSTAB);
             if ($enchantment !== null) {
                 if ($damager->getDirectionVector()->dot($entity->getDirectionVector()) > 0) {
-                    $event->setDamage($event->getDamage() * (1 + 0.10 * $enchantment->getLevel()));
+                    $event->setDamage($event->getDamage() + (0.5 * $enchantment->getLevel()));
                 }
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::LIGHTNING);
@@ -806,20 +799,6 @@ class EventListener implements Listener
             }
             $enchantment = $damager->getInventory()->getItemInHand()->getEnchantment(CustomEnchantsIds::PARALYZE);
             if ($enchantment !== null and $entity instanceof Living) {
-                if (!$entity->hasEffect(Effect::SLOWNESS)) {
-                    $effect = Effect::getEffect(Effect::SLOWNESS);
-                    $effect->setAmplifier(5 + $enchantment->getLevel() - 1);
-                    $effect->setDuration(60 + ($enchantment->getLevel() - 1) * 20);
-                    $effect->setVisible(false);
-                    $entity->addEffect($effect);
-                }
-                if (!$entity->hasEffect(Effect::BLINDNESS)) {
-                    $effect = Effect::getEffect(Effect::BLINDNESS);
-                    $effect->setAmplifier(1);
-                    $effect->setDuration(60 + ($enchantment->getLevel() - 1) * 20);
-                    $effect->setVisible(false);
-                    $entity->addEffect($effect);
-                }
                 if (!$entity->hasEffect(Effect::WEAKNESS)) {
                     $effect = Effect::getEffect(Effect::WEAKNESS);
                     $effect->setAmplifier(5 + $enchantment->getLevel() - 1);
